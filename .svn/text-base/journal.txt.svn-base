@@ -1,0 +1,50 @@
+27/10/08
+
+CPU has been implemented (started 18/09/08) and tested, seems to be functioning correctly.
+
+Timing Info (NTSC):
+
+Scanline = 113.66666666666667 CPU cycles - 341 PPU cycles
+1 CPU cycle = 3 PPU cycles
+262 scanlines per frame (1 dummy scanline, 20 VBlank, 1 pre-render + 240 render = 262)
+Frame = 262 * 341 = 89342 PPU cycles || 262 * 113.66666666666667 = 29780.666666666668 CPU cycles
+
+NMI triggered every 89342 PPU cycles / 29780.666666666668 CPU cycles
+NTSC CPU clock speed = 29780.666666666668 * 60 = 1786840
+1786840 cycles every second
+
+// end timing info
+
+Will be using CPU debugging output for Data Mining coursework, to see which instructions/addressing modes form patterns/groups.
+
+28/10/08
+
+Implemented colour for nametables. Still a few problems, but mostly accurate. Need to better understand attribute table lookups.
+
+29/10/08
+
+Created an OpenGL experimental port.
+Changed attribute byte and square lookups to use tables.
+
+01/11/08
+
+Changed SDL BPP to 24, noticeable performance increase.
+
+Abandoned per-scanline sprite rendering in favour of full frame method. Complete rendering background, then merge sprites into framebuffer. Works nicely.
+
+Still need to implement background priority and 8x16 sprites.
+
+Might need to switch back to per scanline rendering, background priority doesn't behave correctly.
+
+01/11/08
+
+Added preliminary support for input devices/controllers. Mem IO 4016/4017 are responding.
+
+04/11/08
+
+Seemingly correct implementation of joypad/controller. Works fine on all games, and as expected.
+
+05/11/08
+
+Used NEStress test ROM CPU tests to fix some minor bugs. BIT instruction in CPU setting Z flag incorrectly, due to omitted & operation. Fixed. BRK pushing incorrect return address of PC. Changed to PC + 1. Passes CPU test.
+

@@ -1,0 +1,47 @@
+#include "NES.h"
+
+const char* DEFAULT_ROM = "roms/Balloon Fight.nes";
+
+SDL_Surface* screen;
+
+bool init_SDL(int scale, bool fs) {
+    if(SDL_Init(SDL_INIT_EVERYTHING) < 0) 
+		return false;
+		
+	if((screen = SDL_SetVideoMode(256 * scale, 240 * scale, 
+	    24, SDL_HWSURFACE | SDL_DOUBLEBUF
+	    | (fs ? SDL_FULLSCREEN : 0))) == NULL)
+		return false;
+	
+	// Hide the mouse cursor if in fullscreen mode
+    if(fs) SDL_ShowCursor(false);
+    
+	return true;
+}
+
+void clean_up() {
+    if(screen) SDL_FreeSurface(screen);
+    SDL_Quit();
+}
+
+int main(int argc, char* argv[]) {
+    bool fs = false;
+    int scale = 2;
+    if(argc == 3) scale = atoi(argv[2]);
+    if(argc == 4) fs = true;
+    
+    if (!init_SDL(scale, fs)) {
+        cerr << "Couldn't initialise SDL graphics" << endl;
+        clean_up();
+        exit(-1);
+    }
+    
+    Display disp(screen, scale);
+    
+    if(argc < 2) NES nes(DEFAULT_ROM, disp);
+    else NES nes(argv[1], disp);
+    
+    clean_up();
+    
+    return 0;
+}
